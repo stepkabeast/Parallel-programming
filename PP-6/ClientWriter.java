@@ -1,0 +1,29 @@
+ public class ClientWriter extends Thread {
+
+    int TimeRequired;
+    int Index;
+    String name;
+    DB data;
+
+    public ClientWriter(DB database, int counter, int nextInt) {
+        this.data = database;
+        this.Index = counter;
+        this.TimeRequired = nextInt;
+        this.name = "Writer #" + counter;
+    }
+
+    public void run() {
+        System.out.println("Создан клиент " + name);
+        try {
+            data.sem1.acquire();
+            System.out.println("Клиент " + name + "получил доступ к базе данных");
+            sleep(TimeRequired);
+            System.out.println("Клиент " + name + "закончил работу с базой данных");
+            data.sem1.release();
+        } catch(InterruptedException e) {
+            System.out.println("Исключение!");
+        }
+
+    }
+
+}
